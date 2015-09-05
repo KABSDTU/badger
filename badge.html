@@ -6,6 +6,7 @@
   <script type='text/javascript' src='jquery-2.1.4.min.js'></script>
   <style type='text/css'>
     .draggable { cursor: move; }  /* Change mouse cursor */
+    @media print { .no-print, .no-print * { display: none !important; } }
   </style>
   
 <script type='text/javascript'>//<![CDATA[
@@ -153,7 +154,7 @@ function rgbToHex(rgb) {
             <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
         </svg>
     </div>
-    <div>
+    <div class='no-print'>
         <input type="hidden" id="txtItem"><br>
         Text: <input type="text" id="txtText"><br>
         Font: <input type="text" id="txtFont"><br>
