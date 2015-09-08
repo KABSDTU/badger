@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Basic Example with JSX and ES6 features</title>
+    <link rel="stylesheet" href="lib/base.css" />
+  </head>
+  <body>
+    <div id="container">
+      <p>
+        If you can see this, React is not working right.
+        If you checked out the source from GitHub make sure to run <code>grunt</code>.
+      </p>
+    </div>
+    <script src="lib/react.js"></script>
+    <script src="lib/JSXTransformer.js"></script>
+    <script type="text/jsx;harmony=true">
+      class BadgeRender extends React.Component {
+        render() {
+          var backgroundDisplay = this.props.display === 'print' ? 'none' : 'visible';
+          var clipPath = this.props.display === 'print' ? '#print' : '#visible';
+          return <div
+          className="content"
+          dangerouslySetInnerHTML={{
+            __html: `<svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <clipPath id="visible">
+                    <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                </clipPath>
+                    <clipPath id="print">
+                        <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                    </clipPath>
+                <path id="lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                <path id="upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+            </defs>
+            <image id="fgImg" clip-path="url(${clipPath})" transform="matrix(1 0 0 1 0 0)" xlink:href="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Gullfoss%2C_Su%C3%B0urland%2C_Islandia%2C_2014-08-16%2C_DD_123.JPG/640px-Gullfoss%2C_Su%C3%B0urland%2C_Islandia%2C_2014-08-16%2C_DD_123.JPG" x="-50" y="-50" height="400px" width="400px" />
+            <image id="bgImg" class="draggable" transform="matrix(1 0 0 1 0 0)" xlink:href="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Gullfoss%2C_Su%C3%B0urland%2C_Islandia%2C_2014-08-16%2C_DD_123.JPG/640px-Gullfoss%2C_Su%C3%B0urland%2C_Islandia%2C_2014-08-16%2C_DD_123.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;display:${backgroundDisplay};" />
+            <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
+            <!-- Tekst -->
+            <g font-size="25" fill="white" text-anchor="middle">
+                <text>
+                    <textPath xlink:href="#upper-path" startOffset="50%" id="TextTop" class="darkStroke">${this.props.topText}</textPath>
+                        <textPath xlink:href="#upper-path" startOffset="50%" id="TextTop">${this.props.topText}</textPath>
+                    <textPath xlink:href="#lower-path" startOffset="50%" id="TextBottom" class="darkStroke">${this.props.bottomText}</textPath>
+                    <textPath xlink:href="#lower-path" startOffset="50%" id="TextBottom">${this.props.bottomText}</textPath>
+                </text>
+            </g>
+            <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" class="darkStroke">${this.props.centerText}</text>
+            <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle">${this.props.centerText}</text>
+        </svg>`
+          }}
+        />
+        }
+      }
+
+      var BadgeEditor = React.createClass({
+        getInitialState: function() {
+          return {
+            topText: "OPtur 2015",
+            centerText: "Peter",
+            bottomText: "C. Elektroteknologi",
+            display: "editor"
+          };
+        },
+        handleChange: function() {
+          this.setState(
+            {
+              topText: React.findDOMNode(this.refs.topTextField).value,
+              centerText: React.findDOMNode(this.refs.centerTextField).value,
+              bottomText: React.findDOMNode(this.refs.bottomTextField).value,
+              display: React.findDOMNode(this.refs.printCheckbox).checked ? 'editor' : 'print'
+            });
+        },
+        render: function() {
+          return (
+            <div>
+              <BadgeRender topText={this.state.topText} bottomText={this.state.bottomText} centerText={this.state.centerText} display={this.state.display} />
+              <input onChange={this.handleChange} ref="topTextField" defaultValue={this.state.topText} />
+              <input onChange={this.handleChange} ref="centerTextField" defaultValue={this.state.centerText} />
+              <input onChange={this.handleChange} ref="bottomTextField" defaultValue={this.state.bottomText} />
+              <input type="checkbox" ref="printCheckbox" onChange={this.handleChange} />
+            </div>);
+        }
+      });
+
+      React.render(
+          <BadgeEditor />,
+          document.getElementById('container')
+        );
+    </script>
+  </body>
+</html>
+h

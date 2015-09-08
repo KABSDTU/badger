@@ -1,0 +1,9 @@
+.darkStroke {
+  fill:none;
+  fill-opacity:1;
+  stroke:#000000;
+  stroke-width:3px;
+  stroke-linecap:butt;
+  stroke-linejoin:miter;
+  stroke-opacity:1;
+}
