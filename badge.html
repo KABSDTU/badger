@@ -3,10 +3,11 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Badger, badger, badger, mushroom, mushroom!</title>
-  <script type='text/javascript' src='jquery-2.1.4.min.js'></script>
+  <script type='text/javascript' src='http://code.jquery.com/jquery-2.2.1.min.js'></script>
   <style type='text/css'>
     .draggable { cursor: move; }  /* Change mouse cursor */
-    @media print { .no-print, .no-print * { display: none !important; } }
+    @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
+	#app { float: left; }
   </style>
   
 <script type='text/javascript'>//<![CDATA[
@@ -20,7 +21,7 @@ function setEdit(elm) {
 }
 
 function save() {
-    // hack til at vælge det valgte tekstfeltet i svg billedet:
+    // hack til at vaelge det valgte tekstfeltet i svg billedet:
     var elm = $("#" + $("#txtItem").val() )[0];
     
     elm.innerHTML = $("#txtText").val(); // tekst
@@ -28,7 +29,7 @@ function save() {
     $(elm).css('font-family', $("#txtFont").val()); // font
 
     //elm.style['font-size'] = $("#txtSize").val(); 
-    $(elm).css('font-size', $("#txtSize").val()); // størrelse
+    $(elm).css('font-size', $("#txtSize").val()); // size
 
     $(elm).css('fill', $("#txtColor").val()); // farve
 }
@@ -52,7 +53,7 @@ function dropHandler(file) {
 	file.target.href = localFilename;
 	//console.log("change image " + file.target + " to image " + localFilename);
     }
-    //file.dataTransfer.files[0] // bemærk problemer med Chrome Dev Console: http://stackoverflow.com/a/11573873
+    //file.dataTransfer.files[0] // Problems with Chrome Dev Console: http://stackoverflow.com/a/11573873
 }
 
 function getSelectedElements(evt) {
@@ -111,7 +112,7 @@ function deselectElement(evt) {
     });
 }
 
-// HJÆLPE METODER
+// HELPERS
 function componentToHex(c) {
     var hex = parseInt(c).toString(16);
     return hex.length == 1 ? "0" + hex : hex;
@@ -130,7 +131,8 @@ function rgbToHex(rgb) {
 </script>
 </head>
 <body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
-  <div style="width: 100%; overflow: hidden;">
+  <div id="container" style="width: 100%; overflow: hidden;">
+   <div id="app">
     <div style="float: left;">
         <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -161,8 +163,16 @@ function rgbToHex(rgb) {
         Size: <input type="text" id="txtSize"><br>
         Color: <input type="color" id="txtColor" value="#ffffff"><br>
         <button type="button" onclick="save();">Save</button><br>
+		<button type="button" onclick="$('#app').clone().appendTo('#container');">Create copy</button>
         <!--<div id="addImg" style="/*height: 50px; width: 50px; background-color: #000000*/">Drop image here to add.</div>-->
     </div>
-</div>
+   </div><!-- app -->
+  </div><!-- container -->
+
+<script type='text/javascript'>
+if (typeof jQuery == 'undefined') {  
+	alert("jQuery not loaded.");
+}
+</script>
 </body>
 </html>
