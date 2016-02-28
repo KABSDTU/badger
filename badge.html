@@ -7,7 +7,7 @@
   <style type='text/css'>
     .draggable { cursor: move; }  /* Change mouse cursor */
     @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
-	#app { float: left; }
+    #app { float: left; }
   </style>
   
 <script type='text/javascript'>//<![CDATA[
@@ -143,8 +143,8 @@ function rgbToHex(rgb) {
                 <path id="upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
             </defs>
             <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#cut-off-bottom)" />
-            <image id="bgImg" class="draggable" onmousedown="selectElement(event)" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" />
-            <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
+            <image id="bgImg" class="draggable no-print" onmousedown="selectElement(event)" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" />
+            <circle class="no-print" cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
 
             <!-- Tekst -->
             <g font-size="25" fill="white" text-anchor="middle">
