@@ -8,6 +8,7 @@
     .draggable { cursor: move; }  /* Change mouse cursor */
     @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
     #badge { float: left; }
+    input[type='file'] { color: transparent; } /* Don't show "No file has been selected" */
   </style>
   <script type='text/javascript' src='app.js'></script>
 </head>
@@ -17,33 +18,37 @@
     <div style="float: left;">
         <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <clipPath id="cut-off-bottom">
+                <clipPath id="badge-cutoff">
                     <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
                 </clipPath>
-                <path id="lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
-                <path id="upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                <clipPath id="badge-full">
+                    <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                </clipPath>
+                <path id="text-lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                <path id="text-upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
             </defs>
-            <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#cut-off-bottom)" />
-            <image id="bgImg" class="draggable no-print" onmousedown="selectElement(event)" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" />
+            <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#badge-cutoff)" beforeprint="fullCut()" />
+            <image id="bgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" class="draggable no-print" onmousedown="selectElement(event)" />
             <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
 
             <!-- Tekst -->
             <g font-size="25" fill="white" text-anchor="middle">
                 <text>
-                    <textPath xlink:href="#upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
-                    <textPath xlink:href="#lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
+                    <textPath xlink:href="#text-upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
+                    <textPath xlink:href="#text-lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
                 </text>
             </g>
             <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
         </svg>
     </div>
    </div><!-- badge -->
-   <div class="no-print" style="display: inline-block; float: left;">
+   <div class="no-print" style="display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135);">
        <input type="hidden" id="txtItem"><br>
-       Text: <input type="text" id="txtText" onchange="save();"><br>
-       Font: <input type="text" id="txtFont" onchange="save();"><br>
-       Size: <input type="text" id="txtSize" onchange="save();"><br>
-       Color: <input type="color" id="txtColor" value="#ffffff" onchange="save();">&nbsp;
+       Text: <input type="text" id="txtText" onkeyup="save()"><br>
+       Font: <input type="text" id="txtFont" onkeyup="save()"><br>
+       Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
+       <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
+       Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br><br>
        <button type="button" onclick="save(); $('#badge').clone().appendTo('#container');" style="float: right;">Clone</button>
        <!--<div id="addImg" style="/*height: 50px; width: 50px; background-color: #000000*/">Drop image here to add.</div>-->
     </div>

@@ -1,8 +1,13 @@
+// Requires jQuery
+
+if (window.navigator.userAgent.indexOf('Edge/') > -1)
+    alert("IE Edge not supported! Please use Firefox or Chrome instead.");
+
 function setEdit(elm) {
     $("#txtItem").val( elm.id );
     $("#txtText").val( elm.innerHTML );
     $("#txtFont").val( $(elm).css('font-family') );
-    $("#txtSize").val( $(elm).css('font-size') );
+    $("#txtSize").val( $(elm).css('font-size').replace("px", "") );
     $("#txtColor").val( rgbToHex($(elm).css('fill')) );
 }
 
@@ -11,12 +16,8 @@ function save() {
     var elm = $("#" + $("#txtItem").val() )[0];
     
     elm.innerHTML = $("#txtText").val(); // tekst
-
     $(elm).css('font-family', $("#txtFont").val()); // font
-
-    //elm.style['font-size'] = $("#txtSize").val(); 
-    $(elm).css('font-size', $("#txtSize").val()); // size
-
+    $(elm).css('font-size', $("#txtSize").val() + "px"); // size
     $(elm).css('fill', $("#txtColor").val()); // farve
 }
 
@@ -89,14 +90,31 @@ function moveElement(evt) {
 
 function deselectElement(evt) {
     selectedElements.forEach(function(selectedElement) {
-        if (selectedElement != 0) {
+        if (selectedElement != []) {
             selectedElement.removeAttributeNS(null, "onmousemove");
             selectedElement.removeAttributeNS(null, "onmouseout");
             selectedElement.removeAttributeNS(null, "onmouseup");
-            selectedElement = 0;
+            selectedElement = [];
         }
     });
 }
+
+function fullCut() { // Prepair border of background for printing
+    $("[id=fgImg]").each(function(_,elm) {
+        $(elm).attr("clip-path", "url(#badge-full)");
+    });
+}
+
+
+// Hack for browsers that doesn't support "beforeprint" (everyone but IE ...)
+if ('matchMedia' in window) {
+    window.matchMedia('print').addListener(function(media) {
+        if (media.matches) {
+            fullCut();
+        }
+    });
+}
+
 
 // HELPERS
 function componentToHex(c) {
