@@ -24,23 +24,10 @@ function save() {
 function dropHandler(file) {
     file.stopPropagation(); // don't change webpage to image file
     var localFilename = file.dataTransfer.files[0].name;
-    var BgAndFg = [$('#bgImg')[0],$('#fgImg')[0]]; 
-    if ($.inArray(file.target, BgAndFg) != -1) {
+
 	// change bagground
-        $('#bgImg')[0].href.baseVal = localFilename;
-        $('#fgImg')[0].href.baseVal = localFilename;
-    /*} else if (file.target == $('#addImg')[0]) {
-        var img = $(new Image());
-	img.attr('class', 'draggable');
-	img.attr('onmousedown', 'selectElement(event)');
-	img.attr('ondragover', 'event.preventDefault()');
-	img.attr('src', '' + localFilename).appendTo($(file.target)).fadeIn();
-    */
-    } else {
-	file.target.href = localFilename;
-	//console.log("change image " + file.target + " to image " + localFilename);
-    }
-    //file.dataTransfer.files[0] // Problems with Chrome Dev Console: http://stackoverflow.com/a/11573873
+    $('#bgImg')[0].href.baseVal = localFilename;
+    $('#fgImg')[0].href.baseVal = localFilename;
 }
 
 function getSelectedElements(evt) {
