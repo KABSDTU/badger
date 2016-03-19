@@ -92,11 +92,22 @@ function fullCut() { // Prepair border of background for printing
     });
 }
 
+function cloneBadge() {
+    $($('.badge')[0]).clone().appendTo('#container');
+    //$($("#closeBtn")[0]).css("visibility", "collapse"); // Hide delete button from first badge
+}
+
+function deleteBadge(badge) {
+    if (confirm('Are you sure you want to delete this badge?')) {
+        $(badge).parent().detach();
+    }
+}
 
 // Hack for browsers that doesn't support "beforeprint" (everyone but IE ...)
 if ('matchMedia' in window) {
     window.matchMedia('print').addListener(function(media) {
         if (media.matches) {
+            console.log("Got print signal")
             fullCut();
         }
     });

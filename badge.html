@@ -5,17 +5,20 @@
   <title>Badger, badger, badger, mushroom, mushroom!</title>
   <script type='text/javascript' src='http://code.jquery.com/jquery-2.2.1.min.js'></script>
   <style type='text/css'>
+  	#container { width: 100%; overflow: hidden; }
     .draggable { cursor: move; }  /* Change mouse cursor */
+    .menu { display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135); }
+    .badge { float: left; }
+    .closeBtn { float: right; position: relative; right: 25px; top: 25px; }
     @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
-    #badge { float: left; }
-    input[type='file'] { color: transparent; } /* Don't show "No file has been selected" */
   </style>
   <script type='text/javascript' src='app.js'></script>
 </head>
 <body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
-  <div id="container" style="width: 100%; overflow: hidden;">
-   <div id="badge">
-    <div style="float: left;">
+  <div id="container">
+   <div class="badge">
+    <div style="float: left">
+    	<button class="closeBtn no-print" title="Delete badge" onclick="deleteBadge(this)">X</button>
         <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <clipPath id="badge-cutoff">
@@ -42,21 +45,20 @@
         </svg>
     </div>
    </div><!-- badge -->
-   <div class="no-print" style="display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135);">
+   <div class="menu no-print">
        <input type="hidden" id="txtItem"><br>
        Text: <input type="text" id="txtText" onkeyup="save()"><br>
        Font: <input type="text" id="txtFont" onkeyup="save()"><br>
        Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
        <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
        Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br><br>
-       <button type="button" onclick="save(); $('#badge').clone().appendTo('#container');" style="float: right;">Clone</button>
-       <!--<div id="addImg" style="/*height: 50px; width: 50px; background-color: #000000*/">Drop image here to add.</div>-->
+       <button type="button" onclick="save(); cloneBadge()" style="float: right">Clone</button>
     </div>
   </div><!-- container -->
 
 <script type='text/javascript'>
 if (typeof jQuery == 'undefined') alert("jQuery not loaded.");
-setEdit($('#TextMiddle')[0]);
+setEdit($('#TextMiddle')[0]); // "DTU" textbox selected as default
 </script>
 
 </body>
