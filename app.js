@@ -1,4 +1,4 @@
-// Requires jQuery
+// This file requires jQuery
 
 if (window.navigator.userAgent.indexOf('Edge/') > -1)
     alert("IE Edge not supported! Please use Firefox or Chrome instead.");
@@ -24,20 +24,11 @@ function save() {
 function dropHandler(file) {
     file.stopPropagation(); // don't change webpage to image file
     var localFilename = file.dataTransfer.files[0].name;
-
-	// change bagground
+    // change bagground
     $('#bgImg')[0].href.baseVal = localFilename;
     $('#fgImg')[0].href.baseVal = localFilename;
 }
 
-function getSelectedElements(evt) {
-    var BgAndFg = [$('#bgImg')[0],$('#fgImg')[0]];
-    if ($.inArray(evt.target, BgAndFg) != -1) {
-        // user has selected front- or background, so return both!
-        return BgAndFg;
-    }
-    return [evt.target]; // return list of one element
-}
 
 // Modificeret kode fra http://www.petercollingridge.co.uk/interactive-svg-components/draggable-svg-element
 var selectedElements = [];
@@ -45,7 +36,7 @@ var currentX = 0, currentY = 0;
 
 function selectElement(evt) {
     selectedElements = [evt.target];
-
+    
     // Special case, if user selects front- or background then make sure to select both:
     var fgAndBg = [ $('#fgImg')[0], $('#bgImg')[0] ];
     if ( $.inArray(evt.target, fgAndBg) != -1) {
@@ -86,6 +77,7 @@ function deselectElement(evt) {
     });
 }
 
+
 function fullCut() { // Prepair border of background for printing
     $("[id=fgImg]").each(function(_,elm) {
         $(elm).attr("clip-path", "url(#badge-full)");
@@ -94,7 +86,6 @@ function fullCut() { // Prepair border of background for printing
 
 function cloneBadge() {
     $($('.badge')[0]).clone().appendTo('#container');
-    //$($("#closeBtn")[0]).css("visibility", "collapse"); // Hide delete button from first badge
 }
 
 function deleteBadge(badge) {
@@ -107,14 +98,12 @@ function deleteBadge(badge) {
 if ('matchMedia' in window) {
     window.matchMedia('print').addListener(function(media) {
         if (media.matches) {
-            console.log("Got print signal")
             fullCut();
         }
     });
 }
 
 
-// HELPERS
 function componentToHex(c) {
     var hex = parseInt(c).toString(16);
     return hex.length == 1 ? "0" + hex : hex;
