@@ -84,6 +84,16 @@ function fullCut() { // Prepair border of background for printing
     });
 }
 
+function scaleImage(val) {
+    [ $('#fgImg')[0], $('#bgImg')[0] ].forEach(function(img) {
+        //$(img).css('transform', 'scale('+val+', '+val+')');
+        newHeight = parseInt($(img).attr('height'),10) * val;
+        newWidth = parseInt($(img).attr('width'),10) * val;
+        $(img).css('max-width', newWidth); $(img).css('width', newWidth);
+        $(img).css('max-height', newHeight); $(img).css('height', newHeight);
+    });
+}
+
 function cloneBadge() {
     $($('.badge')[0]).clone().appendTo('#container');
 }
