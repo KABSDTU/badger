@@ -1,79 +1,79 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Badger, badger, badger, mushroom, mushroom!</title>
-  <script type='text/javascript' src='http://code.jquery.com/jquery-2.2.1.min.js'></script>
-  <style type='text/css'>
-  	#container { width: 100%; overflow: hidden; }
-    .draggable { cursor: move; }  /* Change mouse cursor */
-    .menu { display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135); }
-    .badge { float: left; }
-    .closeBtn { float: right; position: relative; right: 25px; top: 25px; }
-    @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
-  </style>
-  <script type='text/javascript' src='app.js'></script>
-</head>
-<body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
-  <div id="container">
-   <div class="badge">
-    <div style="float: left">
-    	<button class="closeBtn no-print" title="Delete badge" onclick="deleteBadge(this)">X</button>
-        <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <clipPath id="badge-cutoff">
-                    <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
-                </clipPath>
-                <clipPath id="badge-full">
-                    <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
-                </clipPath>
-                <path id="text-lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
-                <path id="text-upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
-            </defs>
-            <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#badge-cutoff)" beforeprint="fullCut()" />
-            <image id="bgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" class="draggable no-print" onmousedown="selectElement(event)" />
-            <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
-
-            <!-- Tekst -->
-            <g font-size="25" fill="white" text-anchor="middle">
-                <text>
-                    <textPath xlink:href="#text-upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
-                    <textPath xlink:href="#text-lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
-                </text>
-            </g>
-            <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
-        </svg>
-    </div>
-   </div><!-- badge -->
-   <div class="menu no-print">
-       <input type="hidden" id="txtItem"><br>
-       Text: <input type="text" id="txtText" onkeyup="save()"><br>
-       Font:
-       <select id="txtFont" style="font-family: inherit">
-        <option style="font-family: 'Times New Roman'" value="Times New Roman" selected>Times New Roman</option>
-        <option style="font-family: 'Helvetica'" value="Helvetica">Helvetica</option>
-        <option style="font-family: 'Arial'" value="Arial">Arial</option>
-        <option style="font-family: 'Comic Sans MS'" value="Comic Sans MS">Comic Sans MS</option><!-- Muhahaha -->
-        <option style="font-family: 'Segoe Print'" value="Segoe Print">Segoe Print</option>
-        <option style="font-family: 'Terminal'" value="Terminal">Terminal</option>
-        <option style="font-family: 'Impact'" value="Impact">Impact</option>
-        <option style="font-family: 'Tahoma'" value="Tahoma">Tahoma</option>
-        <option style="font-family: 'Wingdings'" value="Wingdings">Wingdings</option>
-        <!-- TODO: How well does this work on Mac? Add option 'write name on own font'. -->
-       </select><br>
-       <!-- Font: <input type="text" id="txtFont" onkeyup="save()"><br> -->
-       Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
-       <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
-       Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br>
-       Image Scale: <input id='scale_slider' type='range' min='0.1' max='3.0' step='0.01' value='1.0' onchange="scaleImage(this.value)" /><br>
-       <button type="button" onclick="save(); cloneBadge()" style="float: right">Clone</button>
-    </div>
-  </div><!-- container -->
-
-<script type='text/javascript'>
-if (typeof jQuery == 'undefined') alert("jQuery not loaded.");
-setEdit($('#TextMiddle')[0]); // "DTU" textbox selected as default
-</script>
-
-</body>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Badger, badger, badger, mushroom, mushroom!</title>
+        <script type='text/javascript' src='http://code.jquery.com/jquery-2.2.1.min.js'></script>
+        <style type='text/css'>
+            #container { width: 100%; overflow: hidden; }
+            .draggable { cursor: move; }  /* Change mouse cursor */
+            .menu { display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135); }
+            .badge { float: left; }
+            .closeBtn { float: right; position: relative; right: 25px; top: 25px; }
+            @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
+        </style>
+        <script type='text/javascript' src='app.js'></script>
+    </head>
+    <body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
+        <div id="container">
+            <div class="badge">
+                <div style="float: left">
+                    <button class="closeBtn no-print" title="Delete badge" onclick="deleteBadge(this)">X</button>
+                    <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <clipPath id="badge-cutoff">
+                                <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                            </clipPath>
+                            <clipPath id="badge-full">
+                                <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                            </clipPath>
+                            <path id="text-lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                            <path id="text-upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                        </defs>
+                        <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#badge-cutoff)" beforeprint="fullCut()" />
+                        <image id="bgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" class="draggable no-print" onmousedown="selectElement(event)" />
+                        <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
+                        <!-- Tekst -->
+                        <g font-size="25" fill="white" text-anchor="middle">
+                            <text>
+                                <textPath xlink:href="#text-upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
+                                <textPath xlink:href="#text-lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
+                            </text>
+                        </g>
+                        <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
+                    </svg>
+                </div>
+            </div>
+            <!-- badge -->
+            <div class="menu no-print">
+                <input type="hidden" id="txtItem"><br>
+                Text: <input type="text" id="txtText" onkeyup="save()"><br>
+                Font:
+                <select id="txtFont" style="font-family: inherit">
+                    <option style="font-family: 'Times New Roman'" value="Times New Roman" selected>Times New Roman</option>
+                    <option style="font-family: 'Helvetica'" value="Helvetica">Helvetica</option>
+                    <option style="font-family: 'Arial'" value="Arial">Arial</option>
+                    <option style="font-family: 'Comic Sans MS'" value="Comic Sans MS">Comic Sans MS</option><!-- Muhahaha -->
+                    <option style="font-family: 'Segoe Print'" value="Segoe Print">Segoe Print</option>
+                    <option style="font-family: 'Terminal'" value="Terminal">Terminal</option>
+                    <option style="font-family: 'Impact'" value="Impact">Impact</option>
+                    <option style="font-family: 'Tahoma'" value="Tahoma">Tahoma</option>
+                    <option style="font-family: 'Wingdings'" value="Wingdings">Wingdings</option>
+                    <!-- TODO: How well does this work on Mac? Add option 'write name on own font'. -->
+                </select>
+                <br>
+                <!-- Font: <input type="text" id="txtFont" onkeyup="save()"><br> -->
+                Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
+                <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
+                Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br>
+                Image Scale: <input id='scale_slider' type='range' min='0.1' max='3.0' step='0.01' value='1.0' onchange="scaleImage(this.value)" /><br>
+                <button type="button" onclick="save(); cloneBadge()" style="float: right">Clone</button>
+            </div>
+        </div>
+        <!-- container -->
+        <script type='text/javascript'>
+            if (typeof jQuery == 'undefined') alert("jQuery not loaded.");
+            setEdit($('#TextMiddle')[0]); // "DTU" textbox selected as default
+        </script>
+    </body>
 </html>
