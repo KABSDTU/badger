@@ -48,7 +48,20 @@
    <div class="menu no-print">
        <input type="hidden" id="txtItem"><br>
        Text: <input type="text" id="txtText" onkeyup="save()"><br>
-       Font: <input type="text" id="txtFont" onkeyup="save()"><br>
+       Font:
+       <select id="txtFont" style="font-family: inherit">
+        <option style="font-family: 'Times New Roman'" value="Times New Roman" selected>Times New Roman</option>
+        <option style="font-family: 'Helvetica'" value="Helvetica">Helvetica</option>
+        <option style="font-family: 'Arial'" value="Arial">Arial</option>
+        <option style="font-family: 'Comic Sans MS'" value="Comic Sans MS">Comic Sans MS</option><!-- Muhahaha -->
+        <option style="font-family: 'Segoe Print'" value="Segoe Print">Segoe Print</option>
+        <option style="font-family: 'Terminal'" value="Terminal">Terminal</option>
+        <option style="font-family: 'Impact'" value="Impact">Impact</option>
+        <option style="font-family: 'Tahoma'" value="Tahoma">Tahoma</option>
+        <option style="font-family: 'Wingdings'" value="Wingdings">Wingdings</option>
+        <!-- TODO: How well does this work on Mac? Add option 'write name on own font'. -->
+       </select><br>
+       <!-- Font: <input type="text" id="txtFont" onkeyup="save()"><br> -->
        Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
        <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
        Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br>

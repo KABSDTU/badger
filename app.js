@@ -6,7 +6,7 @@ if (window.navigator.userAgent.indexOf('Edge/') > -1)
 function setEdit(elm) {
     $("#txtItem").val( elm.id );
     $("#txtText").val( elm.innerHTML );
-    $("#txtFont").val( $(elm).css('font-family') );
+    $("#txtFont option[value=" + $(elm).css('font-family') + "]").prop('selected', true);
     $("#txtSize").val( $(elm).css('font-size').replace("px", "") );
     $("#txtColor").val( rgbToHex($(elm).css('fill')) );
 }
