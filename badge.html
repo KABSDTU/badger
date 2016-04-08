@@ -1,168 +1,78 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Badger, badger, badger, mushroom, mushroom!</title>
-  <script type='text/javascript' src='jquery-2.1.4.min.js'></script>
-  <style type='text/css'>
-    .draggable { cursor: move; }  /* Change mouse cursor */
-    @media print { .no-print, .no-print * { display: none !important; } }
-  </style>
-  
-<script type='text/javascript'>//<![CDATA[
-
-function setEdit(elm) {
-    $("#txtItem").val( elm.id );
-    $("#txtText").val( elm.innerHTML );
-    $("#txtFont").val( $(elm).css('font-family') );
-    $("#txtSize").val( $(elm).css('font-size') );
-    $("#txtColor").val( rgbToHex($(elm).css('fill')) );
-}
-
-function save() {
-    // hack til at vælge det valgte tekstfeltet i svg billedet:
-    var elm = $("#" + $("#txtItem").val() )[0];
-    
-    elm.innerHTML = $("#txtText").val(); // tekst
-
-    $(elm).css('font-family', $("#txtFont").val()); // font
-
-    //elm.style['font-size'] = $("#txtSize").val(); 
-    $(elm).css('font-size', $("#txtSize").val()); // størrelse
-
-    $(elm).css('fill', $("#txtColor").val()); // farve
-}
-
-function dropHandler(file) {
-    file.stopPropagation(); // don't change webpage to image file
-    var localFilename = file.dataTransfer.files[0].name;
-    var BgAndFg = [$('#bgImg')[0],$('#fgImg')[0]]; 
-    if ($.inArray(file.target, BgAndFg) != -1) {
-	// change bagground
-        $('#bgImg')[0].href.baseVal = localFilename;
-        $('#fgImg')[0].href.baseVal = localFilename;
-    /*} else if (file.target == $('#addImg')[0]) {
-        var img = $(new Image());
-	img.attr('class', 'draggable');
-	img.attr('onmousedown', 'selectElement(event)');
-	img.attr('ondragover', 'event.preventDefault()');
-	img.attr('src', '' + localFilename).appendTo($(file.target)).fadeIn();
-    */
-    } else {
-	file.target.href = localFilename;
-	//console.log("change image " + file.target + " to image " + localFilename);
-    }
-    //file.dataTransfer.files[0] // bemærk problemer med Chrome Dev Console: http://stackoverflow.com/a/11573873
-}
-
-function getSelectedElements(evt) {
-    var BgAndFg = [$('#bgImg')[0],$('#fgImg')[0]];
-    if ($.inArray(evt.target, BgAndFg) != -1) {
-        // user has selected front- or background, so return both!
-        return BgAndFg;
-    }
-    return [evt.target]; // return list of one element
-}
-
-// Modificeret kode fra http://www.petercollingridge.co.uk/interactive-svg-components/draggable-svg-element
-var selectedElements = [];
-var currentX = 0, currentY = 0;
-
-function selectElement(evt) {
-    selectedElements = [evt.target];
-
-    // Special case, if user selects front- or background then make sure to select both:
-    var fgAndBg = [ $('#fgImg')[0], $('#bgImg')[0] ];
-    if ( $.inArray(evt.target, fgAndBg) != -1) {
-        selectedElements = fgAndBg;
-    }
-
-    currentX = evt.clientX;
-    currentY = evt.clientY;
-
-    selectedElements.forEach(function(selectedElement) {
-        selectedElement.setAttributeNS(null, "onmousemove", "moveElement(evt)");
-        selectedElement.setAttributeNS(null, "onmouseout", "deselectElement(evt)");
-        selectedElement.setAttributeNS(null, "onmouseup", "deselectElement(evt)");
-    });
-}
-
-function moveElement(evt) {
-    var dx = evt.clientX - currentX;
-    var dy = evt.clientY - currentY;   
-    
-    selectedElements.forEach(function(selectedElement) {
-        selectedElement.setAttributeNS(null, "x", parseInt(selectedElement.getAttributeNS(null, "x")) + dx );
-        selectedElement.setAttributeNS(null, "y", parseInt(selectedElement.getAttributeNS(null, "y")) + dy );
-    });
-
-    currentX = evt.clientX;
-    currentY = evt.clientY;
-}
-
-function deselectElement(evt) {
-    selectedElements.forEach(function(selectedElement) {
-        if (selectedElement != 0) {
-            selectedElement.removeAttributeNS(null, "onmousemove");
-            selectedElement.removeAttributeNS(null, "onmouseout");
-            selectedElement.removeAttributeNS(null, "onmouseup");
-            selectedElement = 0;
-        }
-    });
-}
-
-// HJÆLPE METODER
-function componentToHex(c) {
-    var hex = parseInt(c).toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(rgb) {
-    // split from rbg(x, y,z) to [x, y, z]
-    rgb = rgb.replace(/[^\d,]/g, '').split(',');
-    
-    // assign r = x, g = y, b = z
-    var r = rgb[0], g = rgb[1], b = rgb[2];
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-//]]> 
-</script>
-</head>
-<body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
-  <div style="width: 100%; overflow: hidden;">
-    <div style="float: left;">
-        <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <clipPath id="cut-off-bottom">
-                    <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
-                </clipPath>
-                <path id="lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
-                <path id="upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
-            </defs>
-            <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#cut-off-bottom)" />
-            <image id="bgImg" class="draggable" onmousedown="selectElement(event)" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" />
-            <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
-
-            <!-- Tekst -->
-            <g font-size="25" fill="white" text-anchor="middle">
-                <text>
-                    <textPath xlink:href="#upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
-                    <textPath xlink:href="#lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
-                </text>
-            </g>
-            <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
-        </svg>
-    </div>
-    <div class='no-print'>
-        <input type="hidden" id="txtItem"><br>
-        Text: <input type="text" id="txtText"><br>
-        Font: <input type="text" id="txtFont"><br>
-        Size: <input type="text" id="txtSize"><br>
-        Color: <input type="color" id="txtColor" value="#ffffff"><br>
-        <button type="button" onclick="save();">Save</button><br>
-        <!--<div id="addImg" style="/*height: 50px; width: 50px; background-color: #000000*/">Drop image here to add.</div>-->
-    </div>
-</div>
-</body>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Badger, badger, badger, mushroom, mushroom!</title>
+        <script type='text/javascript' src='http://code.jquery.com/jquery-2.2.1.min.js'></script>
+        <style type='text/css'>
+            #container { width: 100%; overflow: hidden; }
+            .draggable { cursor: move; }  /* Change mouse cursor */
+            .menu { display: inline-block; float: left; padding: 10px; background: rgb(90, 210, 135); }
+            .badge { float: left; }
+            .closeBtn { float: right; position: relative; right: 25px; top: 25px; }
+            @media print { .no-print, .no-print * { display: none !important; } } /* Don't print menu */
+        </style>
+        <script type='text/javascript' src='app.js'></script>
+    </head>
+    <body ondragover="event.preventDefault();" ondrop="event.preventDefault(); dropHandler(event)">
+        <div id="container">
+            <div class="badge">
+                <div style="float: left">
+                    <button class="closeBtn no-print" title="Delete badge" onclick="deleteBadge(this)">X</button>
+                    <svg version="1.1" baseProfile="full" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <clipPath id="badge-cutoff">
+                                <circle cx="150" cy="150" r="2.5cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                            </clipPath>
+                            <clipPath id="badge-full">
+                                <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" fill="transparent" />
+                            </clipPath>
+                            <path id="text-lower-path" d="M 60, 150 c 0, 120, 180, 120, 180, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                            <path id="text-upper-path" d="M 80, 150 c 0, -100, 140, -100, 140, 0" stroke="black" fill="green" stroke-width="2" fill-opacity="0.5" />
+                        </defs>
+                        <image id="fgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" clip-path="url(#badge-cutoff)" beforeprint="fullCut()" />
+                        <image id="bgImg" xlink:href="pic.JPG" x="-50" y="-50" height="400px" width="400px" style="opacity:0.2;" class="draggable no-print" onmousedown="selectElement(event)" />
+                        <circle cx="150" cy="150" r="3cm" stroke="black" stroke-width="0.1mm" stroke-dasharray="5,5" fill="transparent" />
+                        <!-- Tekst -->
+                        <g font-size="25" fill="white" text-anchor="middle">
+                            <text>
+                                <textPath xlink:href="#text-upper-path" startOffset="50%" id="TextTop" onclick="setEdit(this)">OPtur 2015</textPath>
+                                <textPath xlink:href="#text-lower-path" startOffset="50%" id="TextBottom" onclick="setEdit(this)">C. Elektroteknologi</textPath>
+                            </text>
+                        </g>
+                        <text x="150" y="175" font-size="60" text-anchor="middle" fill="white" id="TextMiddle" onclick="setEdit(this)">DTU</text>
+                    </svg>
+                </div>
+            </div>
+            <!-- badge -->
+            <div class="menu no-print">
+                <input type="hidden" id="txtItem"><br>
+                Text: <input type="text" id="txtText" onkeyup="save()"><br>
+                Font:
+                <select id="txtFont" onchange="save()">
+                    <option style="font-family: 'Times New Roman'" value="Times New Roman" selected>Times New Roman</option>
+                    <option style="font-family: 'Helvetica'" value="Helvetica">Helvetica</option>
+                    <option style="font-family: 'Arial'" value="Arial">Arial</option>
+                    <option style="font-family: 'Comic Sans MS'" value="Comic Sans MS">Comic Sans MS</option><!-- Muhahaha -->
+                    <option style="font-family: 'Segoe Print'" value="Segoe Print">Segoe Print</option>
+                    <option style="font-family: 'Terminal'" value="Terminal">Terminal</option>
+                    <option style="font-family: 'Impact'" value="Impact">Impact</option>
+                    <option style="font-family: 'Tahoma'" value="Tahoma">Tahoma</option>
+                    <option style="font-family: 'Wingdings'" value="Wingdings">Wingdings</option>
+                    <!-- TODO: How well does this work on Mac? Add option 'write name on own font'. -->
+                </select>
+                <br>
+                Size: <input type="number" style="width: 40px" id="txtSize" onkeyup="save()" onchange="save()" min="0" value="60"> px &nbsp;
+                <!-- Background: <input type="file" id="txtBg" onchange="console.log(this);"><br> -->
+                Color: <input type="color" id="txtColor" value="#ffffff" onchange="save()"><br>
+                Image Scale: <input id='scale_slider' type='range' min='0.1' max='3.0' step='0.01' value='1.0' onchange="scaleImage(this.value)" /><br>
+                <button type="button" onclick="save(); cloneBadge()" style="float: right">Clone</button>
+            </div>
+        </div>
+        <!-- container -->
+        <script type='text/javascript'>
+            if (typeof jQuery == 'undefined') alert("jQuery not loaded.");
+            setEdit($('#TextMiddle')[0]); // "DTU" textbox selected as default
+        </script>
+    </body>
 </html>
